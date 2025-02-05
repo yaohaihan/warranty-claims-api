@@ -125,11 +125,13 @@ pipeline {
         stage('Build and Push Application Image') {
             steps {
                 script {
+                    sh'''
                     aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
                     docker build --cache-from=$BASE_IMAGE_NAME:latest -t $APP_IMAGE_NAME:$BUILD_NUMBER \
                                 -t $APP_IMAGE_NAME:latest  .
                     docker push $APP_IMAGE_NAME:$BUILD_NUMBER
                     docker push $APP_IMAGE_NAME:latest
+                    '''
                 }
             }
         }
