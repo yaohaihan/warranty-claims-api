@@ -76,7 +76,7 @@ pipeline {
                 }
             }
         }
-
+/*
         stage('Upload reports to Defectdojo'){
             steps {
                 script{
@@ -88,7 +88,7 @@ pipeline {
             }
         }
 
-
+*/
         stage('Install Dependencies and Test') {
             agent {
                 docker {
@@ -156,7 +156,7 @@ pipeline {
                 }
             }
         }
-
+/*
         stage('Upload trivy reports to Defectdojo'){
             steps {
                 script{
@@ -166,7 +166,7 @@ pipeline {
                 }
             }
         }
-
+*/
 
         stage('Deploy to Server') {
             agent {
