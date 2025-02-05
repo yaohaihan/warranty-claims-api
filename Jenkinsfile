@@ -30,7 +30,7 @@ pipeline {
                     }
 
                     steps{
-                        script {catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                        script {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 sh'''
                                 pip install --upgrade pip
@@ -62,7 +62,7 @@ pipeline {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 sh'''
                                 npm install -g retire
-                                retire --path . -- outputformat json -- outputpath retire.json
+                                retire --path . --outputformat json -- outputpath retire.json
                                 '''
                             }
                         }
@@ -75,7 +75,7 @@ pipeline {
                     }
                 }
             }
-        
+        }
 
         // stage('Upload reports to Defectdojo'){
         //     steps {
