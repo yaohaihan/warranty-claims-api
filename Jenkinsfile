@@ -99,7 +99,10 @@ pipeline {
 
             steps {
                 sh '''
-                npm install
+                echo $WORKSPACE
+                mkdir -p $WORKSPACE/.npm-cache
+                npm config set cache $WORKSPACE/.npm-cache
+                npm install --unsafe-perm
                 npm run test
                 '''
             }
