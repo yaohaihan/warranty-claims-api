@@ -90,20 +90,18 @@ pipeline {
 
 
         stage('Install Dependencies and Test') {
-            agent {
-                docker {
-                    image 'node:20.11.1'
-                    args '--rm'
-                }   
-            }
+            // agent {
+            //     docker {
+            //         image 'node:20.11.1'
+            //         args '--rm'
+            //     }   
+            // }
 
             steps {
                 sh '''
-                echo $WORKSPACE
-                mkdir -p $WORKSPACE/.npm-cache
-                npm config set cache $WORKSPACE/.npm-cache
-                npm install --unsafe-perm
-                npm run test
+                docker run --rm -v $PWD:/app -w /app node:20.11.1 bash -c "
+                npm install
+                npm run test"
                 '''
             }
         }
