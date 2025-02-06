@@ -1,4 +1,4 @@
-FROM yaohaihan/juice-shop-base:latest
+FROM yaohaihan/store-base:latest
 
 WORKDIR /app
 

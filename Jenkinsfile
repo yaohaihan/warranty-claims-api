@@ -26,7 +26,7 @@ pipeline {
                         script {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 sh'''
-                                docker run --rm -v $PWD:/app -w /app python:3 bash -c"
+                                docker run --rm -v $PWD:/app -w /app python:3 sh -c "
                                 pip install --upgrade pip &&
                                 pip install njsscan &&
                                 njsscan --exit-warning .  --sarif -o njsscan.sarif"
@@ -49,9 +49,10 @@ pipeline {
                         script {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 sh'''
-                                docker run --rm -v $(pwd):/workspace -w /workspace returntocorp/semgrep bash -c "
-                                semgrep --config p/javascript --json --output semgrep-report.json
-                                "
+                                docker run --rm -v $PWD:/app -w /app node:20.11.1 sh -c "
+                                    npm install -g retire &&
+                                    retire --path . -- outputformat json -- outputpath /app/retire.json
+                                    "
                                 '''
                             }
                         }
@@ -59,7 +60,7 @@ pipeline {
 
                     post {
                         always {
-                            archiveArtifacts artifacts: 'semgrep-report.json', allowEmptyArchive: true
+                            archiveArtifacts artifacts: 'retire.json.json', allowEmptyArchive: true
                         }
                     }
                 }
