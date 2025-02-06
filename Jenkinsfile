@@ -4,8 +4,8 @@ pipeline {
     environment {
         BASE_IMAGE_NAME = 'yaohaihan/store-base'
         APP_IMAGE_NAME = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/store"
-        INSTANCE_ID = 'i-0d0fbbefa1e530d83'  
-        APP_URL = 'http://18.141.188.146:3000'
+        INSTANCE_ID = 'i-0f9d5f4287d93a523'  
+        APP_URL = 'http://54.169.186.28:3000'
     }
 
     stages {
@@ -22,20 +22,15 @@ pipeline {
         stage('Security Scans') {
             parallel {
                 stage('njsscan check') {
-                    agent {
-                        docker {
-                            image 'python'
-                            args '--entrypoint=""'
-                        }
-                    }
-
                     steps{
                         script {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 sh'''
-                                pip install --upgrade pip
-                                pip install njsscan
-                                njsscan --exit-warning .  --sarif -o njsscan.sarif 
+                                docker run --rm -v $PWD:/app -w /app python:3 bash -c"
+                                pip install --upgrade pip &&
+                                pip install njsscan &&
+                                njsscan --exit-warning .  --sarif -o njsscan.sarif"
+
                                 '''
                             }
 
@@ -50,19 +45,13 @@ pipeline {
                 }
 
                 stage('Retire.js check') {
-                    agent {
-                        docker{
-                            image 'node:19-bullseye'
-                            args '--entrypoint=""'
-                        }
-                    }
-
                     steps {
                         script {
                             catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 sh'''
-                                npm install -g retire
-                                retire --path . --outputformat json -- outputpath retire.json
+                                docker run --rm -v $(pwd):/workspace -w /workspace returntocorp/semgrep bash -c "
+                                semgrep --config p/javascript --json --output semgrep-report.json
+                                "
                                 '''
                             }
                         }
@@ -70,7 +59,7 @@ pipeline {
 
                     post {
                         always {
-                            archiveArtifacts artifacts: 'retire.json', allowEmptyArchive: true
+                            archiveArtifacts artifacts: 'semgrep-report.json', allowEmptyArchive: true
                         }
                     }
                 }
@@ -90,27 +79,16 @@ pipeline {
 
 
         stage('Install Dependencies and Test') {
-            // agent {
-            //     docker {
-            //         image 'node:20.11.1'
-            //         args '--rm'
-            //     }   
-            // }
-
             steps {
                 sh '''
                 docker run --rm -v $PWD:/app -w /app node:20.11.1 bash -c "
+                whoami  //测试一下 是以什么用户来执行的命令
                 npm install
                 npm run test"
                 '''
             }
         }
 
-        stage('Build Project') {
-            steps {
-                sh 'npm run build'
-            }
-        }
 
         stage('Build Base Image') {
             when {
