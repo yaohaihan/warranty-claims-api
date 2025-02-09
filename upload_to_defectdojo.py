@@ -9,12 +9,12 @@ if file_name == 'gitleaks-report.json':
     test_id = 41
 elif file_name == 'njsscan.sarif':
     scan_type = 'SARIF'
-    test_id = 42
+    test_id = 52
 elif file_name == 'retire.json':
     scan_type = 'Retire.js Scan'
-    test_id = 40
+    test_id = 53
 elif file_name == 'trivy-report.json':
-    test_id = 43
+    test_id = 54
     scan_type = 'Trivy Scan'
     
 

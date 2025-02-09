@@ -68,16 +68,16 @@ pipeline {
             }
         }
 
-        // stage('Upload reports to Defectdojo'){
-        //     steps {
-        //         script{
-        //             sh '''
-        //                 python3 upload_to_defectdojo.py njsscan.sarif
-        //                 python3 upload_to_defectdojo.py retire.json
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Upload reports to Defectdojo'){
+            steps {
+                script{
+                    sh '''
+                        python3 upload_to_defectdojo.py njsscan.sarif
+                        python3 upload_to_defectdojo.py retire.json
+                    '''
+                }
+            }
+        }
 
 
         stage('Install Dependencies and Test') {
@@ -140,15 +140,15 @@ pipeline {
             }
         }
 
-        // stage('Upload trivy reports to Defectdojo'){
-        //     steps {
-        //         script{
-        //             sh '''
-        //             python3 upload_to_defectdojo.py trivy-report.json
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Upload trivy reports to Defectdojo'){
+            steps {
+                script{
+                    sh '''
+                    python3 upload_to_defectdojo.py trivy-report.json
+                    '''
+                }
+            }
+        }
 
         stage('Deploy to Server') {
             agent {
@@ -233,6 +233,8 @@ pipeline {
                 }
             }    
         }
+
+
     }
 
     post {
