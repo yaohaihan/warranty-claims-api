@@ -72,6 +72,8 @@ pipeline {
             steps {
                 script{
                     sh '''
+                        pwd
+                        ls
                         python3 upload_to_defectdojo.py njsscan.sarif
                         python3 upload_to_defectdojo.py /app/retire.json
                     '''
