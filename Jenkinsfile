@@ -52,7 +52,7 @@ pipeline {
                                 sh'''
                                 docker run --rm -v $PWD:/app -w /app node:20.11.1 sh -c "
                                     npm install -g retire &&
-                                    retire --path . -- outputformat json -- outputpath retire.json
+                                    retire --path . -- outputformat json -- outputpath /app/retire.json
                                     "
                                 '''
                             }
