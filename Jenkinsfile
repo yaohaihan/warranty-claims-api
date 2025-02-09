@@ -52,7 +52,7 @@ pipeline {
                                 sh'''
                                 docker run --rm -v $PWD:/app -w /app node:20.11.1 sh -c "
                                     npm install -g retire &&
-                                    retire --path . -- outputformat json -- outputpath /app/retire.json
+                                    retire --path . -- outputformat json --outputpath /app/retire.json
                                     "
                                 '''
                             }
@@ -73,7 +73,7 @@ pipeline {
                 script{
                     sh '''
                         python3 upload_to_defectdojo.py njsscan.sarif
-                        python3 upload_to_defectdojo.py retire.json
+                        python3 upload_to_defectdojo.py /app/retire.json
                     '''
                 }
             }
