@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../users/users.service';
+import { UserService } from '../users/user.service';
 import { User, UserDocument } from '../users/user.schema';
 import * as bcrypt from 'bcrypt';
 
@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<UserDocument | null> {
-    const user = await this.userService.getUserByEmail(email);  // 需要在 UserService 中实现此方法
+    const user = await this.userService.getUserByEmail(email);  //需要在 UserService 中实现此方法
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }

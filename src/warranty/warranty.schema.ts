@@ -1,22 +1,24 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { User } from '../users/user.schema';
-import { Product } from '../products/product.schema';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+
+export type WarrantyClaimDocument = WarrantyClaim & Document;
 
 @Schema()
-export class WarrantyClaim extends Document {
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  customer: User;
+export class WarrantyClaim {
+    @Prop({ required: true })
+    productId: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Product', required: true })
-  product: Product;
+    @Prop({ required: true })
+    userId: string;
 
-  @Prop({ required: true })
-  issueDescription: string;
+    @Prop({ required: true })
+    description: string;
 
-  @Prop({ default: 'pending' })
-  status: string;  // Possible values: 'pending', 'approved', 'rejected'
+    @Prop({ default: 'pending', enum: ['pending', 'approved', 'rejected'] })
+    status: string;
 
-  @Prop({ default: Date.now })
-  createdAt: Date;
+    @Prop({ default: Date.now })
+    createdAt: Date;
 }
+
+export const WarrantyClaimSchema = SchemaFactory.createForClass(WarrantyClaim);

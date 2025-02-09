@@ -4,8 +4,9 @@ pipeline {
     environment {
         BASE_IMAGE_NAME = 'yaohaihan/store-base'
         APP_IMAGE_NAME = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/store"
-        INSTANCE_ID = 'i-0f9d5f4287d93a523'  
-        APP_URL = 'http://54.169.186.28:3000'
+        INSTANCE_ID = 'i-0543e798e20b83add'  
+        APP_URL = 'http://18.139.208.255:3000'
+        MONGO_URI = credentials('mongo_url')
     }
 
     stages {
@@ -166,6 +167,7 @@ pipeline {
                         export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} && \
                         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} && \
                         export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} && \
+                        export MONGO_URI=${MONGO_URI} && \
                         aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com && \
                         docker pull ${APP_IMAGE_NAME}:latest && \
                         docker stop store || true && \
