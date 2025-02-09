@@ -15,14 +15,14 @@ export class UserController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
   ) {}
-  // 注册用户接口
+
   @Post('register')
   @ApiOperation({ summary: 'Register' })
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.createUser(createUserDto);
   }
 
-  // 获取所有用户接口（需要权限）
+
 //   @UseGuards(JwtAuthGuard)
 //   @Get()
 //   async getAllUsers(): Promise<User[]> {

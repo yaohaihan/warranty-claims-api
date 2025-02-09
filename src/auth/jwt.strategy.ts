@@ -8,7 +8,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly userService: UserService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'your_jwt_secret_key',  // 使用与 JWT 模块中相同的密钥
+      secretOrKey: 'your_jwt_secret_key',  
     });
   }
 
@@ -17,6 +17,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new Error('Invalid token');
     }
-    return user;  // 返回用户信息，会存储在 `req.user` 中
+    return user;  
   }
 }

@@ -22,7 +22,7 @@ export class WarrantyService {
           throw new NotFoundException(`Warranty claim with ID ${claimId} not found`);
         }
     
-        // 更新状态
+        
         claim.status = status;
         return claim.save();
       }
@@ -38,7 +38,7 @@ export class WarrantyService {
         }
 
 
-        // 创建保修请求
+    
         const newClaim = new this.warrantyModel({
         ...createClaimDto,
         userId,
